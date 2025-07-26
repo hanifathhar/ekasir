@@ -1,0 +1,16 @@
+[23-Feb-2024 16:22:48 Asia/Jakarta] PHP Fatal error:  Uncaught Error: Class 'classConnection' not found in /home/simt5448/public_html/page/controler/upload_exel.php:4
+Stack trace:
+#0 {main}
+  thrown in /home/simt5448/public_html/page/controler/upload_exel.php on line 4
+[23-Feb-2024 16:24:00 Asia/Jakarta] PHP Fatal error:  Uncaught Error: Class 'classConnection' not found in /home/simt5448/public_html/page/controler/upload_exel.php:4
+Stack trace:
+#0 {main}
+  thrown in /home/simt5448/public_html/page/controler/upload_exel.php on line 4
+[25-Apr-2024 16:18:42 Asia/Jakarta] PHP Fatal error:  Uncaught Error: Class 'classConnection' not found in /home/simt5448/public_html/page/controler/upload_exel.php:4
+Stack trace:
+#0 {main}
+  thrown in /home/simt5448/public_html/page/controler/upload_exel.php on line 4
+[25-Apr-2024 16:27:57 Asia/Jakarta] PHP Fatal error:  Uncaught Error: Class 'classConnection' not found in /home/simt5448/public_html/page/controler/upload_exel.php:4
+Stack trace:
+#0 {main}
+  thrown in /home/simt5448/public_html/page/controler/upload_exel.php on line 4
