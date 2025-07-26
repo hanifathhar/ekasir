@@ -1,0 +1,75 @@
+DELIMITER $$
+
+USE `dbsimretail`$$
+
+DROP PROCEDURE IF EXISTS `jurnal_penjualan`$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `jurnal_penjualan`(IN `vnomor` VARCHAR(100))
+Block1: BEGIN
+DECLARE vno_bukti VARCHAR (150); 
+DECLARE vno_bukti_new VARCHAR (150); 
+DECLARE vtgl_bukti DATE;
+DECLARE vketerangan VARCHAR (250); 
+DECLARE vnhpp DOUBLE;
+DECLARE vnilai DOUBLE;
+DECLARE vnbayar DOUBLE;
+DECLARE vnsaldo DOUBLE;
+DECLARE vkd_rek VARCHAR (150); 
+DECLARE vnm_rek  VARCHAR (250); 
+DECLARE vket VARCHAR (250); 
+DECLARE vuser VARCHAR (250); 
+DECLARE vbayar VARCHAR (5); 
+DECLARE done INT  DEFAULT 0; 		
+DECLARE cur_jurnal CURSOR FOR SELECT no_transaksi,no_transaksi,tgl_transaksi,IF(nm_member<>'',nm_member,'Umum') AS pembeli,total_hpp,grand_total,dibayar,saldo,USER,pembayaran FROM tbl_pembayaran
+                                  WHERE no_transaksi=vnomor;
+			
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;  
+DELETE FROM tbl_jurnal WHERE no_transaksi=vnomor;
+OPEN cur_jurnal;  
+REPEAT
+FETCH cur_jurnal INTO vno_bukti, vno_bukti_new,  vtgl_bukti, vketerangan, vnhpp, vnilai, vnbayar, vnsaldo, vuser, vbayar;	
+	
+	IF done=0 THEN 	
+		
+		
+		
+			
+		IF vbayar = 1 THEN
+		
+			INSERT INTO tbl_jurnal(no_transaksi,tgl_transaksi,kd_akun,nm_akun,debet,kredit,rk,USER,tgl_update,keterangan,jenis,urut) 
+				VALUES(vno_bukti_new, vtgl_bukti, '5.3', 'HPP', vnhpp,0,'D',vuser,NOW(),vketerangan,'Penjualan','1');
+			
+	                INSERT INTO tbl_jurnal(no_transaksi,tgl_transaksi,kd_akun,nm_akun,debet,kredit,rk,USER,tgl_update,keterangan,jenis,urut) 
+				VALUES(vno_bukti_new, vtgl_bukti, '1.4', 'Persediaan', 0,vnhpp,'K',vuser,NOW(),vketerangan,'Penjualan','2');
+			
+		      
+			INSERT INTO tbl_jurnal(no_transaksi,tgl_transaksi,kd_akun,nm_akun,debet,kredit,rk,USER,tgl_update,keterangan,jenis,urut) 
+				VALUES(vno_bukti_new, vtgl_bukti, '1.1', 'Kas', vnbayar,0,'D',vuser,NOW(),vketerangan,'Penjualan','3');
+				
+			INSERT INTO tbl_jurnal(no_transaksi,tgl_transaksi,kd_akun,nm_akun,debet,kredit,rk,USER,tgl_update,keterangan,jenis,urut) 
+				VALUES(vno_bukti_new, vtgl_bukti, '4.1', 'Penjualan', 0,vnbayar,'K',vuser,NOW(),vketerangan,'Penjualan','4');
+		
+		ELSE
+		
+			INSERT INTO tbl_jurnal(no_transaksi,tgl_transaksi,kd_akun,nm_akun,debet,kredit,rk,USER,tgl_update,keterangan,jenis,urut) 
+				VALUES(vno_bukti_new, vtgl_bukti, '5.3', 'HPP', vnhpp,0,'D',vuser,NOW(),vketerangan,'Penjualan','1');
+			
+	                INSERT INTO tbl_jurnal(no_transaksi,tgl_transaksi,kd_akun,nm_akun,debet,kredit,rk,USER,tgl_update,keterangan,jenis,urut) 
+				VALUES(vno_bukti_new, vtgl_bukti, '1.4', 'Persediaan', 0,vnhpp,'K',vuser,NOW(),vketerangan,'Penjualan','2');
+		      
+			INSERT INTO tbl_jurnal(no_transaksi,tgl_transaksi,kd_akun,nm_akun,debet,kredit,rk,USER,tgl_update,keterangan,jenis,urut) 
+				VALUES(vno_bukti_new, vtgl_bukti, '1.3', 'Piutang', vnilai,0,'D',vuser,NOW(),vketerangan,'Penjualan','3');
+				
+			INSERT INTO tbl_jurnal(no_transaksi,tgl_transaksi,kd_akun,nm_akun,debet,kredit,rk,USER,tgl_update,keterangan,jenis,urut) 
+				VALUES(vno_bukti_new, vtgl_bukti, '4.1', 'Penjualan', 0,vnilai,'K',vuser,NOW(),vketerangan,'Penjualan','4');
+		      
+		END IF;
+		
+		
+			
+	END IF;	                     
+UNTIL done END REPEAT;	
+CLOSE cur_jurnal;  
+END block1$$
+
+DELIMITER ;
